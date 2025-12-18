@@ -82,6 +82,24 @@
   
   // Global configuration
   let globalConfig = { ...DEFAULT_CONFIG };
+
+  const selfScriptUrl = (() => {
+    if (typeof document === 'undefined') return '';
+
+    const current = document.currentScript;
+    if (current && current.src) return current.src;
+
+    const scripts = document.getElementsByTagName('script');
+    for (let i = scripts.length - 1; i >= 0; i--) {
+      const src = scripts[i].getAttribute('src') || scripts[i].src;
+      if (!src) continue;
+
+      const abs = new URL(src, document.baseURI).href;
+      if (/butterpop(\.min)?\.js(\?|#|$)/.test(abs)) return abs;
+    }
+
+    return '';
+  })();
   
   // Check if an element exists in document
   const elementExists = (selector) => {
@@ -561,7 +579,7 @@
     // Try to load the CSS file
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'https://cdn.jsdelivr.net/npm/butterpop@1.0.4/butterpop.min.css';
+    link.href = selfScriptUrl ? new URL('./butterpop.css', selfScriptUrl).href : 'butterpop.css';
     link.setAttribute('data-butterpop-css', 'true');
     document.head.appendChild(link);
     

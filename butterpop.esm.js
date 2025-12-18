@@ -551,12 +551,12 @@ const injectCSS = () => {
   // Check if CSS already exists
   if (elementExists('style[data-butterpop-css]')) return;
   
-  // Try to load the CSS file
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'https://cdn.jsdelivr.net/npm/butterpop@1.0.4/butterpop.min.css';
-  link.setAttribute('data-butterpop-css', 'true');
-  document.head.appendChild(link);
+    // Try to load the CSS file
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = selfScriptUrl ? new URL('./butterpop.css', selfScriptUrl).href : 'butterpop.css';
+    link.setAttribute('data-butterpop-css', 'true');
+    document.head.appendChild(link);
   
   // Fallback: if CSS can't be loaded, add basic inline styles
   link.onerror = () => {
